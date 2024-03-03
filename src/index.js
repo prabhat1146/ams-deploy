@@ -7,6 +7,7 @@ import {AdminProfile,StudentDashboard,StudentsPrivateRoutes,AdminPrivateRoutes, 
 import FacultyPrivateRoutes from './pages/main/faculty/facultyPrivateRoutes/FacultyPrivateRoutes';
 
 const router=createBrowserRouter(
+   
    createRoutesFromElements(
       <Route path="/" element={<Layout/>}>
          <Route path='' element={<Home/>}></Route>
@@ -71,7 +72,7 @@ const router=createBrowserRouter(
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
- <React.StrictMode>
+ <React.StrictMode basename={'https://prabhat1146.github.io/iiitg'}>
    <RouterProvider router={router}/>
  </React.StrictMode>
 );
