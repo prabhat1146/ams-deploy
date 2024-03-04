@@ -107,7 +107,7 @@ const MarkStudentsAttendance = (props) => {
     courseName: selectedCourseName,
     facultyEmail: facultyEmail,
     facultyName: facultyName,
-    date: date.toLocaleDateString(),
+    date: currentDate,
     timeSlot: timeSlot,
     studentGroup: studentGroup,
     studentSection: studentSection,
@@ -128,7 +128,7 @@ const MarkStudentsAttendance = (props) => {
       courseName: selectedCourseName,
       facultyEmail: facultyEmail,
       facultyName: facultyName,
-      date: date.toLocaleDateString(),
+      date:currentDate,
       timeSlot: timeSlot,
       studentGroup: studentGroup,
       studentSection: studentSection,
@@ -137,7 +137,7 @@ const MarkStudentsAttendance = (props) => {
     }));
     console.log(query.semester)
 
-  }, [query, selectedYear, facultyEmail, facultyName, date, timeSlot, selectedCourseID, selectedCourseName, studentGroup, studentSection,]);
+  }, [query, selectedYear, facultyEmail, facultyName, date, timeSlot, selectedCourseID, selectedCourseName, studentGroup, studentSection, currentDate]);
 
 
 
@@ -146,7 +146,7 @@ const MarkStudentsAttendance = (props) => {
     const intervalId = setInterval(() => {
       const data = {
         facultyEmail: facultyEmail.trim(),
-        date: date.toLocaleDateString(),
+        date: currentDate,
         timeSlot: timeSlot
       }
       console.log(data)
@@ -161,7 +161,7 @@ const MarkStudentsAttendance = (props) => {
 
     // Clear the interval when the component is unmounted
     return () => clearInterval(intervalId);
-  }, [BASEURL, date, facultyEmail, timeSlot]);
+  }, [BASEURL, currentDate, date, facultyEmail, timeSlot]);
 
 
   const handleQueryChange = (e) => {

@@ -72,7 +72,10 @@ const router=createBrowserRouter(
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
- <React.StrictMode basename={'https://prabhat1146.github.io/iiitg'}>
+ <React.StrictMode >
    <RouterProvider router={router}/>
  </React.StrictMode>
+//  <React.StrictMode basename={'https://prabhat1146.github.io/iiitg'}>
+//    <RouterProvider router={router}/>
+//  </React.StrictMode>
 );
