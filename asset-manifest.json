@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/prabhat1146/ams-deploy.git/static/css/main.6cd1fc4f.css",
-    "main.js": "/prabhat1146/ams-deploy.git/static/js/main.8b9aa1f6.js",
-    "static/media/homeImg.jpg": "/prabhat1146/ams-deploy.git/static/media/homeImg.871d4b2c88ae4f20cbcc.jpg",
-    "static/media/iiitg-pic.webp": "/prabhat1146/ams-deploy.git/static/media/iiitg-pic.11bf1f76bcd00aeec72c.webp",
-    "static/media/iiitg-evening.webp": "/prabhat1146/ams-deploy.git/static/media/iiitg-evening.e2b537bf4a2c48f4236d.webp",
-    "index.html": "/prabhat1146/ams-deploy.git/index.html",
-    "main.6cd1fc4f.css.map": "/prabhat1146/ams-deploy.git/static/css/main.6cd1fc4f.css.map",
-    "main.8b9aa1f6.js.map": "/prabhat1146/ams-deploy.git/static/js/main.8b9aa1f6.js.map"
+    "main.css": "/ams-deploy/static/css/main.9b2516e2.css",
+    "main.js": "/ams-deploy/static/js/main.8b9aa1f6.js",
+    "static/media/homeImg.jpg": "/ams-deploy/static/media/homeImg.871d4b2c88ae4f20cbcc.jpg",
+    "static/media/iiitg-pic.webp": "/ams-deploy/static/media/iiitg-pic.11bf1f76bcd00aeec72c.webp",
+    "static/media/iiitg-evening.webp": "/ams-deploy/static/media/iiitg-evening.e2b537bf4a2c48f4236d.webp",
+    "index.html": "/ams-deploy/index.html",
+    "main.9b2516e2.css.map": "/ams-deploy/static/css/main.9b2516e2.css.map",
+    "main.8b9aa1f6.js.map": "/ams-deploy/static/js/main.8b9aa1f6.js.map"
   },
   "entrypoints": [
-    "static/css/main.6cd1fc4f.css",
+    "static/css/main.9b2516e2.css",
     "static/js/main.8b9aa1f6.js"
   ]
 }
