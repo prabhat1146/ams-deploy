@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { fetchDataFromCourse } from './SearchFromCourse';
-import { fetchData } from '../admin/SetFormData';
-import StudentAttendanceData from './StudentAttendanceData';
-import ShowStudentAttendance from './ShowStudentsAttendance';
-import AttendanceCalculator from '../admin/AttendanceCalculator'
+import { fetchDataFromCourse } from '../faculty/SearchFromCourse';
+import { fetchData } from './SetFormData';
+import StudentAttendanceData from '../faculty/StudentAttendanceData';
+import ShowStudentAttendance from '../faculty/ShowStudentsAttendance';
+import AttendanceCalculator from './AttendanceCalculator'
 
 const ReviewAttendance = (props) => {
     const [selectedDegree, setSelectedDegree] = useState('');
@@ -18,7 +18,7 @@ const ReviewAttendance = (props) => {
     const [groupSelected, setGroupSelected] = useState(false);
     const [semesterType, setsemesterType] = useState();
     const [facultyEmail, setFacultyEmail] = useState()
-    const [facultyDepartment, setFacultyDepartment] = useState()
+    const [facultyDepartment, setFacultyDepartment] = useState([])
     const [allStudents, setAllStudents] = useState([])
     const [date, setDate] = useState(new Date())
     const [currentDate, setCurrentDate] = useState((new Date().toLocaleDateString()));
@@ -30,7 +30,6 @@ const ReviewAttendance = (props) => {
     const [alert, setAlert] = useState()
     const [query, setQuery] = useState({
         degree: '',
-        // year: '',
         semester: '',
         department: '',
 
@@ -61,7 +60,7 @@ const ReviewAttendance = (props) => {
 
     useEffect(() => {
         setFacultyEmail(props.facultyEmail)
-        const url = `${BASEURL}/faculty/search?email=${facultyEmail}`
+        const url = `${BASEURL}/faculty/find?email=${facultyEmail}`
         fetch(url)
             .then((res) => {
                 if (res.ok) {
@@ -69,20 +68,14 @@ const ReviewAttendance = (props) => {
                 }
             })
             .then((res) => {
-                if (res) {
-                    if (res.length) {
-                        setFacultyDepartment(res[0].department)
-                        // setQuery({department:res[0].department})
-                    }
-                }
-
+                setFacultyDepartment(res[0].department)
             })
     }, [BASEURL, facultyEmail, props.facultyEmail])
 
     useEffect(() => {
         // setAllStudents([])
         const degree = `studentDegree=${query.degree}`
-        const dep = `studentDepartment=${facultyDepartment?.toString().trim()}`
+        const dep = `studentDepartment=${query.department.toString().trim()}`
         const cou = `studentCourse.courses.courseID=${selectedCourseID.toString().trim()}`
         const admiYear = `studentAdmissionYear=${selectedYear.toString().trim()}`
         const semester = `studentCourse.semester=${query.semester}`
@@ -91,7 +84,7 @@ const ReviewAttendance = (props) => {
         const miniurl = `${dep}&${admiYear}&${degree}&${semester}&${sGroup}&${cou}&${sSection}`
         if (isDateSelected) {
             const degree = `degree=${query.degree}`
-            const dep = `department=${facultyDepartment?.toString().trim()}`
+            const dep = `department=${facultyDepartment.toString().trim()}`
             const admiYear = `studentAdmissionYear=${selectedYear.toString().trim()}`
             const semester = `semester=${query.semester}`
             const sGroup = `studentGroup=${studentGroup.toString().trim()}`
@@ -111,7 +104,7 @@ const ReviewAttendance = (props) => {
                     }
                 })
                 .then((res) => {
-                    // console.log('r2', res, selectedCourseID)
+                    console.log('r2', res, selectedCourseID)
                     // setAllStudents(res)
 
                     if (res.length === 0) {
@@ -144,7 +137,12 @@ const ReviewAttendance = (props) => {
                 // console.log('s',newStudents)
                 setAllStudents(newStudents)
                 setStudentList(newStudents)
-
+                //   setAllStudents((prevStudents) => {
+                //     const uniqueStudents = newStudents.filter(
+                //       (newStudent) => !prevStudents.some((existingStudent) => existingStudent.id === newStudent.id)
+                //     );
+                //     return [...prevStudents, ...uniqueStudents];
+                //   });
             })
             .catch((error) => {
                 console.log(error)
@@ -173,7 +171,7 @@ const ReviewAttendance = (props) => {
             // setQuery("hi")
             url = `${BASEURL}/course/search`;
             // console.log("hi", selectedDegree)
-            // console.log("hi2", query)
+            console.log("hi2", query)
             const courseData = fetchDataFromCourse(url, query)
             courseData.then((res) => {
                 // return (res.json())
@@ -229,6 +227,21 @@ const ReviewAttendance = (props) => {
 
     };
 
+
+
+
+
+    // const renderSemesterOptions = () => {
+    //     const semesterOptions = [];
+    //     for (let i = 1; i <= (selectedDegree === 'phd' ? 1 : 8); i++) {
+    //         semesterOptions.push(
+    //             <option key={i} value={i}>
+    //                 {i}
+    //             </option>
+    //         );
+    //     }
+    //     return semesterOptions;
+    // };
 
     const renderYearOptions = () => {
         const currentYear = new Date().getFullYear();
@@ -292,7 +305,7 @@ const ReviewAttendance = (props) => {
     return (
         <div className='flex flex-col w-full items-center bg-gradient-to-r from-blue-500 to-purple-500'>
 
-            <div className="mb-4 w-11/12 sm:w-11/12 md:w-3/4 lg:w-1/2">
+            <div className="mb-4 w-full sm:w-11/12 md:w-3/4 lg:w-1/2">
                 <label className="block text-sm font-semibold text-white mb-1">Select Degree</label>
 
                 <div className="flex items-center w-1/2">
@@ -330,6 +343,46 @@ const ReviewAttendance = (props) => {
                     <label htmlFor="phd" className='text-white'>Ph.D</label> */}
                 </div>
 
+                <div className='mt-4'>
+                    <input
+                        type="radio"
+                        className=''
+                        name='department'
+                        id='std1'
+                        value={'CSE'}
+                        onChange={handleQueryChange}
+                    />
+                    <label htmlFor="std1" className='text-white mx-2'>CSE</label>
+
+
+                    <input
+                        type="radio"
+                        className=''
+                        name='department'
+                        id='std2'
+                        value={'ECE'}
+                        onChange={handleQueryChange}
+                    />
+                    <label htmlFor="std2" className='text-white mx-2'>ECE</label>
+                    <input
+                        type="radio"
+                        className=''
+                        name='department'
+                        id='std3'
+                        value={'HSS'}
+                        onChange={handleQueryChange}
+                    />
+                    <label htmlFor="std3" className='text-white mx-2'>HSS</label>
+                    <input
+                        type="radio"
+                        className=''
+                        name='department'
+                        id='std4'
+                        value={'MATHS&SCIENCE'}
+                        onChange={handleQueryChange}
+                    />
+                    <label htmlFor="std4" className='text-white mx-2'>MATHS&SCIENCE</label>
+                </div>
             </div>
 
 
@@ -515,36 +568,36 @@ const ReviewAttendance = (props) => {
                     >Search</button>
                 </div>
                 <h2 className='mb-2 text-white'>{alert}</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                
+            </div>
+
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:mx-8">
                     {!isDateSelected && studentsList?.map(student => (
                         <div
                             key={student.studentEmail}
-                            className="bg-white p-4 rounded-md shadow-md cursor-pointer"
+                            className=" bg-white  p-2 rounded-md shadow-md cursor-pointer grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1"
                             value={student.studentEmail}
                             onClick={() => handleOpenModal(student.studentEmail, student.studentAdmissionYear)}
                         // onClick={()=>handleStudentClick(student.studentEmail)}
                         >
 
-
-                            <div className='flex justify-around items-center m-2' >
+                            <div className='bg-blue-400 p-2 mb-2 rounded-md text-white grid grid-cols-2'>
                                 <div>
-                                    <h2>Name : {student.studentName}</h2>
-                                    <h2>Roll No : {student.studentRoll}</h2>
-                                    <h2>Degree : {student.studentDegree}</h2>
-                                    <h2>Department : {student.studentDepartment}</h2>
+                                <h2>Name : {student.studentName}</h2>
+                                <h2>Roll No : {student.studentRoll}</h2>
+                                <h2>Degree : {student.studentDegree}</h2>
+                                <h2>Department : {student.studentDepartment}</h2>
                                 </div>
-                                <div>
-                                        <button className='bg-blue-600 text-white px-4 p-1 rounded-lg'>Details</button>
+                                <div className='flex justify-center items-center'>
+                                    <button className='bg-blue-800 rounded-md px-2 p-1 '>Details</button>
                                 </div>
                             </div>
-
                             <div>
-                                {/* <h1>hi</h1> */}
-                                <AttendanceCalculator email={student.studentEmail} semester={query.semester} />
+                                <AttendanceCalculator email={student.studentEmail} semester={query.semester}/>
                             </div>
 
                         </div>
-
                     ))}
 
                     {isDateSelected && studentListByDate?.map(student => (
@@ -567,7 +620,6 @@ const ReviewAttendance = (props) => {
 
                     ))}
                 </div>
-            </div>
 
             <ShowStudentAttendance
                 isOpen={isModalOpen}

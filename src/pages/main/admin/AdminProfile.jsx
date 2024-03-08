@@ -5,9 +5,14 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import AddAdmin from './AddAdmin';
 import RemoveAdmin from './RemoveAdmin';
 import VerifyDevice from './VerifyDevice';
+import EditProfile from './EditProfile';
+
 const BASEURL = process.env.REACT_APP_BASEURL
 
 const AdminDashboard = () => {
+  const [editProfile,setEditProfile]=useState(false);
+  const [editProfileText,setEditProfileText]=useState("Show Profile");
+  const [adminID,setAdminID]=useState();
   const [selectedSection, setSelectedSection] = useState('');
   const [name, setName] = useState()
   const [email, setEmail] = useState();
@@ -20,10 +25,10 @@ const AdminDashboard = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (location && location.state) {
-      setEmail(location.state.userEmail)
-      const Email = `email=${email}`
-      const url = `${BASEURL}/admin/find?email=${email}`
+    if (location && location.state && location.state.adminID) {
+      setAdminID(location.state.adminID)
+      const adminid = `adminID=${location.state.adminID}`
+      const url = `${BASEURL}/admin/find?${adminid}`
       fetch(url)
         .then((res) => {
           if (res.ok) {
@@ -39,8 +44,9 @@ const AdminDashboard = () => {
           }
 
           // Handle the successful response
-          // console.log(res);
+          console.log(res[0].email);
           setName(res[0].name);
+          setEmail(res[0].email)
           if (res[0].accessType) {
             setAccessType(res[0].accessType)
           }
@@ -51,7 +57,7 @@ const AdminDashboard = () => {
         });
 
     }
-  })
+  },[location])
 
   const handleSectionChange = (section) => {
     setSelectedSection(section);
@@ -112,6 +118,16 @@ const AdminDashboard = () => {
 
     }
   }
+
+
+  const handleEditProfile=()=>{
+    setEditProfile(!editProfile)
+    if(!editProfile){
+      setEditProfileText("Close Profile")
+    }else{
+      setEditProfileText("Show Profile")
+    }
+  }
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col bg-gradient-to-r from-blue-500 to-purple-500">
       <div className="flex items-center space-x-4 p-4 bg-gradient-to-r from-blue-500 to-purple-500">
@@ -123,12 +139,16 @@ const AdminDashboard = () => {
         <div className='w-3/5'>
           <h3 className="text-lg text-white font-semibold">Name : {name}</h3>
           <p className="text-white">Email : {email}</p>
-          <p className="text-white">AccessType :{accessType}</p>
+          <button
+        className='text-white bg-green-400 rounded-md px-2 p-1'
+        onClick={handleEditProfile}
+          >{editProfileText}</button>
+          {/* <p className="text-white">AccessType :{accessType}</p> */}
         </div>
         <div className='sticky left-full flex flex-col sm:flex-col md:flex-row lg:flex-row'>
           <button className='bg-green-400  hover:bg-green-600  px-6 py-1 m-1 rounded-md ' onClick={handleVerifyDevice}>Verify Device</button>
-          <button className='bg-green-400 hover:bg-green-600  px-6 py-1 m-1 rounded-md ' onClick={handleNewAdmin}>Add</button>
-          <button className='bg-red-400 hover:bg-red-600  px-2.5 py-1  m-1   rounded-md ' onClick={handleRemoveAdmin}>Remove</button>
+          {/* <button className='bg-green-400 hover:bg-green-600  px-6 py-1 m-1 rounded-md ' onClick={handleNewAdmin}>Add</button> */}
+          {/* /<button className='bg-red-400 hover:bg-red-600  px-2.5 py-1  m-1   rounded-md ' onClick={handleRemoveAdmin}>Remove</button> */}
           <button className='bg-red-400 hover:bg-red-600  px-2.5 py-1  m-1   rounded-md ' onClick={handleLogOut}>Logout</button>
           {/* <button className='p-1.5 w-18 px-2 mt-1 bg-red-400 text-md rounded-md '
             onClick={handleLogOut}
@@ -146,7 +166,7 @@ const AdminDashboard = () => {
             className={`hover:bg-gray-700 px-2 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-300 ${selectedSection === 'faculty' ? 'bg-gray-700' : ''
               }`}
           >
-            Faculty Management
+            Faculty
           </button>
 
           <button
@@ -154,7 +174,7 @@ const AdminDashboard = () => {
             className={`hover:bg-gray-700 px-2 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-300 ${selectedSection === 'student' ? 'bg-gray-700' : ''
               }`}
           >
-            Student Management
+            View Students
           </button>
 
           <button
@@ -162,11 +182,12 @@ const AdminDashboard = () => {
             className={`hover:bg-gray-700 px-2 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-300 ${selectedSection === 'courses' ? 'bg-gray-700' : ''
               }`}
           >
-            Courses Management
+            Courses
           </button>
         </div>
       </nav>
       <p className='text-white m-auto'>{alert}</p>
+      {editProfile && <EditProfile adminID={adminID}/>}
       {verifyDevice && <VerifyDevice/>}
       {add && <AddAdmin accessType={accessType} />}
       {remove && <RemoveAdmin accessType={accessType} />}

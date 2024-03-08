@@ -11,7 +11,7 @@ const Home = () => {
   const [totalStudents, setTotalStudents] = useState(0)
   const [totalCourses, setTotalCourses] = useState(0);
 
-  
+
 
 
 
@@ -119,17 +119,12 @@ const Home = () => {
   }, [])
 
   return (
-    <div className=''>
-    <DeviceFingerPrint/>
+    <div className='h-screen bg-gradient-to-r from-blue-500 to-purple-500'>
+      <DeviceFingerPrint />
       <div className='bg-home'>
 
       </div>
-      {/* <div className='bg-admin'>
-
-      </div> */}
-      {/* <div className='bg-bottom'>
-
-      </div> */}
+     
       <div className=" bg-bottom flex items-center justify-center">
 
 

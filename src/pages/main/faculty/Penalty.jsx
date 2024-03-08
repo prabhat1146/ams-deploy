@@ -76,8 +76,8 @@ const Penalty = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center w-full bg-full m-8">
-            <h1 className="text-2xl font-bold my-4">Student Informations</h1>
+        <div className="flex flex-col items-center justify-center w-full bg-full bg-gradient-to-r from-blue-500 to-purple-500">
+            <h1 className="text-2xl font-bold my-4 text-white">Student Informations</h1>
             <form onSubmit={handleSubmit} className="flex flex-col w-64">
                 <input
                     type="text"

@@ -9,15 +9,18 @@ const FacultyList = ({ faculty }) => {
 
   const [facultyEmailForSearch,setFacultyEmailForSearch]=useState();
   const [facultyList,setFacultyList]=useState(faculty);
+  
     function onDelete (email) {
        
         const url = `${BASEURL}/faculty/remove`;
+       if(window.confirm("Are you confirm to delete ?")){
         try {
-        //   console.log(courseData)
-          fetchData(url, {email:email},'Removed',true);
-        } catch (error) {
-          
-        }
+          //   console.log(courseData)
+            fetchData(url, {email:email},'Removed',true);
+          } catch (error) {
+            console.log(error)
+          }
+       }
       };
     function onEdit (email) {
        
@@ -44,7 +47,7 @@ const FacultyList = ({ faculty }) => {
 
   return (
     <div className="mt-8">
-      <h2 className="text-2xl font-bold mb-4">All Faculties ( {facultyList.length} )</h2>
+      <h2 className="text-2xl font-bold mb-4 text-white">All Faculties ( {facultyList.length} )</h2>
       <div>
         <input type="text"
         value={facultyEmailForSearch}
@@ -54,6 +57,9 @@ const FacultyList = ({ faculty }) => {
         <button className='bg-white rounded-r-sm pr-2'
         onClick={findFaculty}
         >Search</button>
+      </div>
+      <div>
+        
       </div>
       <div className='rounded-sm grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
         {facultyList.map((faculty) => (

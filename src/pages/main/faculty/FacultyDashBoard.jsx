@@ -3,6 +3,7 @@ import MarkStudentsAttendance from './MarkStudentsAttendance'
 import ReviewAttendance from './ReviewAttendance'
 import Penalty from './Penalty'
 import { useNavigate,useLocation } from 'react-router-dom';
+import FacultyProfile from './FacultyProfile';
 
 const FacultyDashBoard = () => {
 
@@ -12,7 +13,10 @@ const FacultyDashBoard = () => {
     const [emails, setEmail] = useState('');
     const [name,setName]=useState()
     const [department,setDepartment]=useState()
+    const [facultyProfileEnable,setFacultyProfileEnable]=useState(false);
+    const [showProfileText,setShowProfileText]=useState('Show profile')
     const BASEURL = process.env.REACT_APP_BASEURL;
+
 
     const navigate = useNavigate()
     const location=useLocation()
@@ -82,21 +86,34 @@ const FacultyDashBoard = () => {
         }
     }
 
+    const handleShowProfile=()=>{
+        setFacultyProfileEnable(!facultyProfileEnable);
+        setMarkAttendance(false);
+        setReviewAttendance(false);
+        setPenalty(false);
+        if(!facultyProfileEnable){
+            setShowProfileText('Close profile')
+        }else{
+            setShowProfileText("Show profile")
+        }
+    }
+
     return (
-        <div>
-            <div className="flex items-center space-x-4 p-4 bg-gradient-to-r from-blue-500 to-purple-500">
-                <img
+        <div className='bg-gradient-to-r from-blue-500 to-purple-500  min-h-screen'>
+            <div className="flex  items-center space-x-4 p-4 bg-gradient-to-r from-blue-500 to-purple-500">
+                {/* <img
                     src="path/to/profile-image.jpg"
                     alt="Profile"
                     className="w-12 h-12 rounded-full object-cover"
-                />
+                /> */}
                 
-                <div>
+                <div className='ml-20'>
                     <h3 className="text-xl font-semibold text-white">Name  {name}</h3>
                     <p className="text-white">Email : {emails}</p>
                     <p className="text-white">Department : {department}</p>
+                    <button onClick={handleShowProfile} className='bg-green-500 hover:bg-green-600 text-white px-2 p-1 rounded-md'>{showProfileText}</button>
                 </div>
-                <button className='p-1 w-20 px-4 bg-red-400 text-md text-white rounded-md  sticky left-full'
+                <button className='p-1 w-20 px-4 bg-red-400 hover:bg-red-600 text-md text-white rounded-md  sticky left-full'
                     onClick={handleLogOut}
                 >
                     Logout
@@ -120,9 +137,14 @@ const FacultyDashBoard = () => {
                     Penalty
                 </button>
             </div>
+            {facultyProfileEnable && 
+            <FacultyProfile email={emails}/>
+            }
             {markAttendance && <MarkStudentsAttendance facultyEmail={emails}/>}
             {reviewAttendance && <ReviewAttendance facultyEmail={emails} />}
             {penalty && <Penalty />}
+
+            {/* <h1>hi</h1> */}
 
         </div>
     );

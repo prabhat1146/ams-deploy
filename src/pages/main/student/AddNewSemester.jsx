@@ -23,14 +23,14 @@ const AddNewSemester = (props) => {
     useEffect(() => {
         setNewSemesterData((prevData) => ({
             ...prevData,
-            semester: semester,
-            studentGroup: studentGroup,
-            studentSection: studentSection,
+            semester: semester?.trim(),
+            studentGroup: studentGroup?.trim(),
+            studentSection: studentSection?.trim(),
             courses: selectedCourses,
-            studentRoll: props.studentData.studentRollNumber,
-            studentEmail: props.studentData.studentEmail,
-            studentDegree: props.studentData.studentDegree,
-            studentDepartment: props.studentData.studentDepartment
+            studentRoll: props.studentData.studentRollNumber?.trim(),
+            studentEmail: props.studentData.studentEmail?.trim(),
+            studentDegree: props.studentData.studentDegree?.trim(),
+            studentDepartment: props.studentData.studentDepartment?.trim()
         }))
 
         // console.log(newSemesterData)
@@ -45,7 +45,7 @@ const AddNewSemester = (props) => {
         axios.get(apiUrl)
             .then((response) => {
                 const coursesData = response.data?.map(course => ({
-                    courseID: course.courseID,
+                    courseID: course.courseID?.trim(),
                     courseName: course.courseName,
                     penalty:0
                 }));
@@ -54,7 +54,7 @@ const AddNewSemester = (props) => {
                 // console.log(coursesData);
             })
             .catch(error => console.error('Error fetching courses:', error));
-    }, [semester]);
+    }, [BASEURL, semester]);
 
     const handleCourseChange = (courseID) => {
         // Update the selected courses when a course is selected
@@ -79,8 +79,8 @@ const AddNewSemester = (props) => {
         } catch (error) {
 
         }
-        console.log('Semester:', semester);
-        console.log('Selected Courses:', newSemesterData);
+        // console.log('Semester:', semester);
+        // console.log('Selected Courses:', newSemesterData);
     };
 
     const handleRemoveSelectedCourse = (index) => {

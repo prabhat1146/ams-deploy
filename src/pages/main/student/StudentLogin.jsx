@@ -49,6 +49,7 @@ const StudentLogin = () => {
           } else {
             setIsLoading(false)
             setError('You have not verified yet')
+            // navigate('/student/profile', { state: { logedIn: true, userEmail: useremail } });
           }
 
         })
@@ -120,25 +121,25 @@ const StudentLogin = () => {
 
   return (
     <div className="flex items-center justify-center h-screen bg-gradient-to-r from-blue-500 to-purple-500">
-      <div className="bg-white m-8 p-8 rounded-lg">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">Student Login</h2>
+      <div className="bg-blue-400 m-8 p-8 rounded-lg">
+        <h2 className="text-2xl font-bold mb-6 text-white m-auto">Student Login</h2>
         {/* <p className='text-red-600'>{error}</p> */}
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <div className="mb-4 bg-opacity-90">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
+          <label className="block text-white text-sm font-bold mb-2" htmlFor="username">
             Email
           </label>
           <input
             type="text"
             id="username"
-            className="w-full border border-gray-300 p-2 rounded bg-white"
+            className="w-full border text-black p-2 rounded bg-white"
             placeholder="Enter your user-email"
             value={useremail}
             onChange={(e) => setUseremail(e.target.value)}
           />
         </div>
         <div className="mb-4 bg-opacity-90">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+          <label className="block text-white text-sm font-bold mb-2" htmlFor="password">
             Password
           </label>
           <input
@@ -151,7 +152,7 @@ const StudentLogin = () => {
           />
         </div>
         <div className="mb-4 bg-opacity-90">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="course">
+          <label className="block text-white text-sm font-bold mb-2" htmlFor="course">
             Department
           </label>
           <select
@@ -182,12 +183,12 @@ const StudentLogin = () => {
 
         </button>
 
-        <p><Link to='/student/signup'>Not have an account? SignUp</Link></p>
+        <p className='text-white'><Link to='/student/signup'>Not have an account? SignUp</Link></p>
         {/* <p><Link to='/student/signup'>verify Email</Link></p> */}
-        <button onClick={handleStudentEmailVerification}>Verify Email</button>
+        <button onClick={handleStudentEmailVerification} className='text-white'>Verify Email</button>
 
       </div>
-      <div className='flex fixed top-2/4'>
+      <div className='flex fixed top-2/4 '>
         {
           isLoading && <ReactLoading type='spin' color='blue' />
         }

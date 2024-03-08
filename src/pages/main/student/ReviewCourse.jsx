@@ -14,6 +14,7 @@ const ReviewCourses = (props) => {
   const [attendanceData, setAttendanceData] = useState([])
   const [studentSection, setStudentSection] = useState();
   const [studentGroup, setStudentGroup] = useState();
+  const [studentDegree,setStudentDegree]=useState();
   const [Alert, setAlert] = useState();
 
   useEffect(() => {
@@ -81,38 +82,68 @@ const ReviewCourses = (props) => {
   }, [BASEURL, props.studentData.studentEmail, selectedSemester])
 
   useEffect(() => {
-    // setAttendanceData([])
-    // const url = `${BASEURL}/attendance/attendanceData`
+    
     const url = `${BASEURL}/attendance/attendanceTotalData`
     const attendance = selectedCourse?.map((course) => {
-      if (course.courseID?.toLowerCase().includes("hs")) {
-        // console.log('hs')
-        var data = {
-          'studentAttendances.studentEmail': email,
-          studentAdmissionYear: studentAdmissionYear,
-          courseID: course.courseID
-        }
-      } else if (course.courseName?.toLowerCase().includes("lab")) {
-        // console.log('lab')
-        data = {
-          'studentAttendances.studentEmail': email,
+      let data1;
+      if (studentDegree === 'M.Tech') {
+        data1 = {
+          studentEmail: email,
           studentAdmissionYear: studentAdmissionYear,
           courseID: course.courseID,
-          studentGroup: studentGroup
+          // penalty: course.penalty
+        };
+      } else if (selectedSemester === 1 || selectedSemester=== 2) {
+        if (course.courseName?.toLowerCase().includes('lab')) {
+          data1 = {
+            'studentAttendances.studentEmail': email,
+            studentAdmissionYear: studentAdmissionYear,
+            courseID: course.courseID,
+            studentGroup: studentGroup
+          }
+        } else if (course.courseID?.toLowerCase().includes('hs')) {
+          data1 = {
+            'studentAttendances.studentEmail': email,
+            studentAdmissionYear: studentAdmissionYear,
+            courseID: course.courseID,
+            // studentGroup: studentGroup
+          }
+        } else {
+          data1 = {
+            'studentAttendances.studentEmail': email,
+            studentAdmissionYear: studentAdmissionYear,
+            courseID: course.courseID,
+            studentSection: studentSection
+          }
         }
-      } else if (!course.courseName?.toLowerCase().includes("lab")) {
-        // console.log('!lab')
-        data = {
-          'studentAttendances.studentEmail': email,
-          studentAdmissionYear: studentAdmissionYear,
-          courseID: course.courseID,
-          studentSection: studentSection
-
+      } else {
+        if(course.courseID?.toLowerCase().includes("hs")){
+          data1 = {
+            'studentAttendances.studentEmail': email,
+            studentAdmissionYear: studentAdmissionYear,
+            courseID: course.courseID
+          }
+        }else{
+          if(course?.courseID.toLowerCase().includes('sc')){
+            data1 = {
+              'studentAttendances.studentEmail': email,
+              studentAdmissionYear: studentAdmissionYear,
+              courseID: course.courseID,
+              studentSection: studentSection
+    
+            }
+          }else{
+            data1 = {
+              'studentAttendances.studentEmail': email,
+              studentAdmissionYear: studentAdmissionYear,
+              courseID: course.courseID,
+              studentGroup: studentGroup
+            }
+          }
         }
-        // console.log('!lab', data)
       }
       // console.log('d', course.courseID)
-      fetchDataFromCourse(url, data)
+      fetchDataFromCourse(url, data1)
         .then((res) => {
           // console.log('dt', course.courseID)
           attendanceData.push({
@@ -133,38 +164,72 @@ const ReviewCourses = (props) => {
     const url = `${BASEURL}/attendance/attendanceTotalData`
     const attendance = selectedCourse?.map((course) => {
 
-      if (course.courseID?.toLowerCase().includes("hs")) {
-        // console.log('hs')
-        var data = {
-          // studentEmail: email,
-          studentAdmissionYear: studentAdmissionYear,
-          courseID: course.courseID
-        }
-      } else if (course.courseName?.toLowerCase().includes("lab")) {
-        // console.log('lab')
-        data = {
-          // studentEmail: email,
-          studentAdmissionYear: studentAdmissionYear,
-          courseID: course.courseID,
-          studentGroup: studentGroup
-        }
-      } else if (!course.courseName?.toLowerCase().includes("lab")) {
-        // console.log('!lab')
-        data = {
-          // studentEmail: email,
-          studentAdmissionYear: studentAdmissionYear,
-          courseID: course.courseID,
-          studentSection: studentSection
+      
 
+      //fetching total attendances
+      let data2;
+      if (studentDegree === 'M.Tech') {
+        data2 = {
+          // studentEmail: email,
+          studentAdmissionYear: studentAdmissionYear,
+          courseID: course.courseID,
+          // penalty: course.penalty
+        };
+      } else if (selectedSemester === 1 || selectedSemester === 2) {
+        if (course.courseName?.toLowerCase().includes('lab')) {
+          data2 = {
+            // 'studentAttendances.studentEmail': email,
+            studentAdmissionYear: studentAdmissionYear,
+            courseID: course.courseID,
+            studentGroup: studentGroup
+          }
+        } else if (course.courseID?.toLowerCase().includes('hs')) {
+          data2 = {
+            // 'studentAttendances.studentEmail': email,
+            studentAdmissionYear: studentAdmissionYear,
+            courseID: course.courseID,
+            // studentGroup: studentGroup
+          }
+        } else {
+          data2 = {
+            // 'studentAttendances.studentEmail': email,
+            studentAdmissionYear: studentAdmissionYear,
+            courseID: course.courseID,
+            studentSection: studentSection
+          }
         }
-        // console.log('!lab', data)
+      } else {
+        if(course.courseID?.toLowerCase().includes("hs")){
+          data2 = {
+            // 'studentAttendances.studentEmail': email,
+            studentAdmissionYear: studentAdmissionYear,
+            courseID: course.courseID
+          }
+        }else{
+          if(course?.courseID.toLowerCase().includes('sc')){
+            data2 = {
+              // 'studentAttendances.studentEmail': email,
+              studentAdmissionYear: studentAdmissionYear,
+              courseID: course.courseID,
+              studentSection: studentSection
+    
+            }
+          }else{
+            data2 = {
+              // 'studentAttendances.studentEmail': email,
+              studentAdmissionYear: studentAdmissionYear,
+              courseID: course.courseID,
+              studentGroup: studentGroup
+            }
+          }
+        }
       }
 
 
 
 
       // console.log('d', course.courseID)
-      fetchDataFromCourse(url, data)
+      fetchDataFromCourse(url, data2)
         .then((res) => {
           // console.log('dtx', res)
           setAttendanceData((prevData) => {

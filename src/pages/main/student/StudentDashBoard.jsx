@@ -7,8 +7,11 @@ import CustomCalendar from './Calendar';
 import LiveClasses from './LiveClasses';
 import { generateDeviceFingerprint, isMobileDevice } from '../../deviceFingerPrint/DeviceFingerPrint';
 import { fetchData } from '../admin/SetFormData';
+import StudentEditProfile from './StudentEditProfile';
 
 const StudentDashboard = () => {
+  const [showProfileText, setShowProfileText] = useState('Show profile');
+  const [showProfileEnable, setShowProfileEnable] = useState(false);
   const [currentMobileFingerPrint, setCurrentMobileFingerPrint] = useState(null);
   const [currentLaptopFingerPrint, setCurrentLaptopFingerPrint] = useState(null);
   const [verifiedMobileFingerPrint, setVerifiedMobileFingerPrint] = useState(null);
@@ -109,7 +112,7 @@ const StudentDashboard = () => {
           setStudentDegree(res[0].studentDegree);
           setVerifiedMobileFingerPrint(res[0].mobileID);
           setVerifiedLaptopFingerPrint(res[0].laptopID);
-          
+
           // console.log('rr',res)
         }
       })
@@ -125,11 +128,11 @@ const StudentDashboard = () => {
         if (verifiedMobileFingerPrint) {
           if (currentMobileFingerPrint !== verifiedMobileFingerPrint) {
             setAlert("Please use your own mobile !");
-            return;
+            // return;
           }
         } else {
           setAlert("You have not verified your own mobile yet !");
-          return;
+          // return;
         }
 
       } else {
@@ -206,7 +209,7 @@ const StudentDashboard = () => {
     } else {
       if (!verifiedLaptopFingerPrint) {
         const url = `${BASEURL}/student/verify-laptop`;
-       
+
         const data = {
           studentEmail: studentEmail,
           laptopID: currentLaptopFingerPrint
@@ -236,13 +239,13 @@ const StudentDashboard = () => {
 
   useEffect(() => {
     // console.log('l',verifiedMobileFingerPrint)
-    if(isMobile){
+    if (isMobile) {
       if (verifiedMobileFingerPrint) {
         setIsVerifyDevicesDisable(true);
         // console.log('l',verifiedMobileFingerPrint)
         setDeviceVerifyButtonText("Verified")
       }
-    }else{
+    } else {
       if (verifiedLaptopFingerPrint) {
         setIsVerifyDevicesDisable(true);
         setDeviceVerifyButtonText("Verified")
@@ -250,6 +253,19 @@ const StudentDashboard = () => {
     }
 
   }, [isMobile, verifiedLaptopFingerPrint, verifiedMobileFingerPrint])
+
+  const handleShowProfile = () => {
+    setShowProfileEnable(!showProfileEnable)
+    setReviewAttendance(false);
+    setGiveAttendance(false);
+    setReviewCourse(false);
+    setAddSemester(false);
+    if (!showProfileEnable) {
+      setShowProfileText('Close profile')
+    } else {
+      setShowProfileText('Show profile');
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-500 to-purple-500 p-8">
@@ -280,36 +296,45 @@ const StudentDashboard = () => {
         <p className="text-xl">Email : {studentEmail}</p>
         <p className="text-white">{`Roll No : ${studentRollNumber}`}</p>
         <p className="text-white">{`Department : ${studentDepartment}`}</p>
+        <button className='px-2 p-1 bg-blue-400 hover:bg-blue-600 rounded-md ' onClick={handleShowProfile}>{showProfileText}</button>
       </div>
       {/* <h3 className="text-xl font-bold text-white mb-6">Student Dashboard</h3> */}
 
       <h2 className='text-black m-4'>{Alert}</h2>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <button
-          onClick={() => handleChange('giveAttendance')}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 w-full transition-all duration-300 ease-in-out"
-        >
-          Mark Your Attendance
-        </button>
-        <button
-          onClick={() => handleChange('reviewCourse')}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 w-full transition-all duration-300 ease-in-out"
-        >
-          Review Courses
-        </button>
-        <button
-          onClick={() => handleChange('reviewAttendance')}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 w-full transition-all duration-300 ease-in-out"
-        >
-          Live Classes
-        </button>
-        <button
-          onClick={() => handleChange('addSemester')}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 w-full transition-all duration-300 ease-in-out"
-        >
-          Add New Semester
-        </button>
-      </div>
+      {showProfileEnable &&
+        <StudentEditProfile email={studentEmail}/>
+      }
+      {!showProfileEnable &&
+
+
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <button
+            onClick={() => handleChange('giveAttendance')}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 w-full transition-all duration-300 ease-in-out"
+          >
+            Mark Your Attendance
+          </button>
+          <button
+            onClick={() => handleChange('reviewCourse')}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 w-full transition-all duration-300 ease-in-out"
+          >
+            Review Courses
+          </button>
+          <button
+            onClick={() => handleChange('reviewAttendance')}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 w-full transition-all duration-300 ease-in-out"
+          >
+            Live Classes
+          </button>
+          <button
+            onClick={() => handleChange('addSemester')}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 w-full transition-all duration-300 ease-in-out"
+          >
+            Add New Semester
+          </button>
+        </div>
+      }
       {isMobileMenuOpen && (
         <div className="md:hidden mt-4">
           <button
@@ -325,7 +350,7 @@ const StudentDashboard = () => {
       {reviewAttendance && <LiveClasses />}
       {reviewCourse && <ReviewCourses studentData={studentData} />}
       {addSemester && <AddNewSemester studentData={studentData} />}
-      {reviewCourse && <CustomCalendar />}
+      {/* {reviewCourse && <CustomCalendar />} */}
     </div>
   );
 };

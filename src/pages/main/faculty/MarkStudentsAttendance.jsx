@@ -2,10 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { fetchDataFromCourse } from './SearchFromCourse';
 import { fetchData } from '../admin/SetFormData';
 import ReactLoading from 'react-loading'
+import TotalPresent from './TotalPresent'
 // import StudentAttendanceData from './StudentAttendanceData';
 
 const MarkStudentsAttendance = (props) => {
+  const [showText,setShowText]=useState('Show');
   const [attendanceCount, setAttendancecount] = useState(0);
+  const [currentTimeSlotPresentStudents, setCurrentTimeSlotPresentStudents] = useState()
+  const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedDegree, setSelectedDegree] = useState('x');
   const [selectedYear, setSelectedYear] = useState('');
@@ -38,6 +42,7 @@ const MarkStudentsAttendance = (props) => {
     `${String(date.getHours()).padStart(2, '0')}-${String(date.getHours() + 1).padStart(2, '0')}`
   );
 
+  // console.log('redering')
   useEffect(() => {
     const int = setInterval(() => {
       const DATE = new Date()
@@ -51,21 +56,21 @@ const MarkStudentsAttendance = (props) => {
         setCurrentDate(date.toLocaleDateString())
       }
 
-      
+
 
       return int;
 
     }, 1000);
 
     // console.log('date', date.toLocaleDateString())
-    
+
   }, [date, timeSlot])
 
   const [facultyName, setFacultyName] = useState()
   const [facultyEmail, setFacultyEmail] = useState()
   const [query, setQuery] = useState({
     degree: '',
-    // year: '',
+    semesterType:'',
     semester: '',
     department: '',
 
@@ -75,7 +80,7 @@ const MarkStudentsAttendance = (props) => {
 
   useEffect(() => {
     setFacultyEmail(props.facultyEmail)
-    const url = `${BASEURL}/faculty/find?email=${props.facultyEmail}`
+    const url = `${BASEURL}/faculty/search?email=${props.facultyEmail}`
     fetch(url)
       .then((res) => {
         if (res.ok) {
@@ -87,6 +92,8 @@ const MarkStudentsAttendance = (props) => {
       .then((res) => {
         if (res) {
           setFacultyName(res[0].name)
+          setQuery({department:res[0].department})
+          // console.log(query)
         }
       })
       .catch((error) => {
@@ -128,14 +135,14 @@ const MarkStudentsAttendance = (props) => {
       courseName: selectedCourseName,
       facultyEmail: facultyEmail,
       facultyName: facultyName,
-      date:currentDate,
+      date: currentDate,
       timeSlot: timeSlot,
       studentGroup: studentGroup,
       studentSection: studentSection,
       // semesterType: semesterType
 
     }));
-    console.log(query.semester)
+    // console.log(query.semester)
 
   }, [query, selectedYear, facultyEmail, facultyName, date, timeSlot, selectedCourseID, selectedCourseName, studentGroup, studentSection, currentDate]);
 
@@ -149,13 +156,27 @@ const MarkStudentsAttendance = (props) => {
         date: currentDate,
         timeSlot: timeSlot
       }
-      console.log(data)
+      // console.log(data)
       fetchDataFromCourse(`${BASEURL}/attendance/attendanceTotalData`, data)
         .then((res) => {
           if (res) {
-            console.log(res)
-            setAttendancecount(res[0]?.studentAttendances?.length);
+            // console.log('l', res)
+            // console.log('ll', res[0].studentAttendances)
+            // setAttendancecount(res[0]?.studentAttendances?.length);
+            if (res.length === 0) {
+              setAttendancecount(0);
+            } else if (!res[0].studentAttendances?.length) {
+              setAttendancecount(0);
+            } else if (res[0].studentAttendances?.length) {
+              setAttendancecount(res[0].studentAttendances.length);
+              setCurrentTimeSlotPresentStudents(res[0].studentAttendances)
+              // console.log('lll', res[0].studentAttendances)
+            }
+          } else {
+            setAttendancecount(0);
           }
+
+          // setAttendancecount(3)
         })
     }, 2000);
 
@@ -219,7 +240,7 @@ const MarkStudentsAttendance = (props) => {
       }
     }
 
-  }, [query, selectedDegree])
+  }, [BASEURL, query, selectedDegree])
 
 
   const handleCourseSelect = async (courseID) => {
@@ -228,8 +249,8 @@ const MarkStudentsAttendance = (props) => {
       const selectedCourse = courses.find(course => course.courseID === courseID);
 
       if (selectedCourse) {
-        await setSelectedCourseID(selectedCourse.courseID);
-        await setSelectedCourseName(selectedCourse.courseName);
+        setSelectedCourseID(selectedCourse.courseID);
+        setSelectedCourseName(selectedCourse.courseName);
         // Additional logic or validation if needed
       } else {
         console.error("Selected course not found");
@@ -340,7 +361,7 @@ const MarkStudentsAttendance = (props) => {
     setIsTimerRunning(true);
     setAlert()
 
-    const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
 
 
 
@@ -377,7 +398,7 @@ const MarkStudentsAttendance = (props) => {
         studentAdmissionyear: attendanceData.studentAdmissionyear
       }
 
-      
+
 
       setIsLoading(true);
       fetchData(url, data, "OTP is generated !", true)
@@ -549,7 +570,7 @@ const MarkStudentsAttendance = (props) => {
     const currentYear = new Date().getFullYear();
     const yearOptions = [];
 
-    for (let i = 2013; i <= currentYear; i++) {
+    for (let i =currentYear-4; i <= currentYear; i++) {
       yearOptions.push(
         <option key={i} value={i}>
           {i}
@@ -623,9 +644,18 @@ const MarkStudentsAttendance = (props) => {
     }
   }
 
+  const handleShow = () => {
+    setShow(!show)
+    if(!show){
+      setShowText('Hide')
+    }else{
+      setShowText('Show')
+    }
+  }
+
   return (
     <div className=" flex flex-col items-center bg-gradient-to-r from-blue-500 to-purple-500 ">
-
+     
 
       <h1 className='text-3xl font-bold text-white'>Welcome To</h1>
       <h2 className="text-xl font-bold mb-6 text-white">Attendance Management Page</h2>
@@ -636,8 +666,16 @@ const MarkStudentsAttendance = (props) => {
         }
       </div>
 
-      <div className='m-4'>
+      <div className='m-4 flex'>
         <h1 className='text-white'>Total Present : {attendanceCount}</h1>
+        <button
+          className='mx-4 bg-blue-400 rounded-md px-3 p-1'
+          onClick={handleShow}
+        >{showText}</button>
+      </div>
+
+      <div>
+        {show && <TotalPresent presentData={currentTimeSlotPresentStudents} />}
       </div>
 
       <div className="mb-4 w-11/12 sm:w-11/12 md:w-3/4 lg:w-1/2">
@@ -666,7 +704,7 @@ const MarkStudentsAttendance = (props) => {
           />
           <label htmlFor="mtech" className='text-white'>M.Tech</label>
 
-          <input
+          {/* <input
             type="radio"
             id="phd"
             value="PhD"
@@ -675,7 +713,7 @@ const MarkStudentsAttendance = (props) => {
             name="degree"
             className="ml-4 mr-2"
           />
-          <label htmlFor="phd" className='text-white'>Ph.D</label>
+          <label htmlFor="phd" className='text-white'>Ph.D</label> */}
         </div>
       </div>
 
@@ -766,9 +804,9 @@ const MarkStudentsAttendance = (props) => {
 
 
       <div className="mb-4 w-11/12 sm:w-11/12 md:w-3/4 lg:w-1/2">
-        <label className="block text-sm font-semibold  mb-1 text-white">Select Department</label>
+        {/* <label className="block text-sm font-semibold  mb-1 text-white">Select Department</label> */}
 
-        <div className="flex flex-wrap">
+        {/* <div className="flex flex-wrap">
           <div className="flex items-center mb-2 mr-4">
             <input
               type="radio"
@@ -816,7 +854,7 @@ const MarkStudentsAttendance = (props) => {
             />
             <label htmlFor="mathsScience" className="ml-2 text-white">Maths & Science</label>
           </div>
-        </div>
+        </div> */}
       </div>
 
 
@@ -939,11 +977,11 @@ const MarkStudentsAttendance = (props) => {
           // disabled={sectionSelected}
           className="p-2 mb-2 rounded-md"
         >
-          <option value="10"> 10 s</option>
+          <option value="10">10 s</option>
           <option value="5"> 05 s</option>
-          <option value="10"> 10 s</option>
-          <option value="12"> 12 s</option>
-          <option value="14"> 14 s</option>
+          <option value="10">10 s</option>
+          <option value="12">12 s</option>
+          <option value="14">14 s</option>
           <option value="16">16 s</option>
           <option value="18">18 s</option>
           <option value="20">20 s</option>
@@ -964,7 +1002,7 @@ const MarkStudentsAttendance = (props) => {
         </button>
         {OTP && (
           <div className="mt-2">
-            <label className="block text-sm font-semibold text-gray-600 mb-1">Generated OTP</label>
+            <label className="block text-sm font-semibold text-white mb-1">Generated OTP</label>
             <input
               type="Number"
               value={OTP}

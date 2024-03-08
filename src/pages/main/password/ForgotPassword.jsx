@@ -1,24 +1,46 @@
 // ForgotPassword.js
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [isLoading,setIsLoading]=useState(false);
+  const [Alert,setAlert]=useState();
+
+
+ const navigate =useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Call your API to send a reset password link with the user's email
-    // Example: axios.post('/api/forgot-password', { email });
-    // Handle success and error cases
-    // For the example, we'll just set submitted to true
+
+    if(!email){
+      setAlert("Email id is required !")
+      return ;
+    }
+    if(!email.endsWith("@iiitg.ac.in")){
+      setAlert("IIITG Email-id is required !")
+      return ;
+    }
+
+    if(email){
+      setIsLoading(false);
+      navigate('/admin/verification/admin-password-reset-link', { state: {email:email,name:email}});
+    }else{
+      setIsLoading(false);
+      navigate('/error')
+    }
+
+   
     setSubmitted(true);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-500 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
+        <p className='m-4'>{Alert}</p>
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
             Forgot Password
           </h2>
         </div>
@@ -36,7 +58,7 @@ const ForgotPassword = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="appearance-none rounded-none w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="appearance-none rounded-md w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 placeholder="Email address"
               />
             </div>

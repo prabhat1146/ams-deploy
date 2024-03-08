@@ -53,7 +53,7 @@ const StudentList = ({ students }) => {
         >Search</button>
       </div>
       <div className=' rounded-sm grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-        {studentsList.map((student) => (
+        {studentsList && studentsList?.map((student) => (
           <li key={student._id} className="rounded-lg border p-4 mb-4 flex justify-between items-center bg-slate-200 ">
             <div>
               <strong>Student Name: {student.studentName}</strong> 

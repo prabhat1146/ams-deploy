@@ -17,12 +17,16 @@ const CourseList = ({ courses }) => {
     function onDelete (courseId) {
       
       const url = `${BASEURL}/course/remove`;
-      try {
-        const d={courseID:courseId}
-        // console.log('cou',d)
-        fetchData(url, d, "Removed", true);
-      } catch (error) {
-  
+      if(window.confirm("Are you confirm ?")){
+        try {
+          const d={courseID:courseId}
+          // console.log('cou',d)
+          fetchData(url, d, "Removed", true);
+        } catch (error) {
+          console.log(error)
+        }
+      }else{
+
       }
       };
     function onEdit (courseId) {

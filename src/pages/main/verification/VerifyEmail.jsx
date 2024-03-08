@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { fetchData } from '../admin/SetFormData';
 import ReactLoading from 'react-loading'
 
-const VerifyAndSetPassword = () => {
+const PasswordForm = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
@@ -27,7 +27,7 @@ const VerifyAndSetPassword = () => {
 
   useEffect(() => {
     // Get the current URL
-    // const currentURL = window.location.href;
+    const currentURL = window.location.href;
 
     // Log or use the current URL as needed
     // console.log('Current URL:', currentURL);
@@ -132,7 +132,7 @@ const VerifyAndSetPassword = () => {
           isLoading && <ReactLoading type='spin' color='blue' />
         }
       </div>
-      <h2 className="text-2xl text-white p-8 font-semibold pt-32 mx-auto">Reset password or Verify Email</h2>
+      <h2 className="text-2xl text-white p-8 font-semibold pt-32">Reset password or Verify Email</h2>
       <h2 className='text-2xl text-black-800 px-8 mb-4 font-semibold'>{alert}</h2>
       <form onSubmit={handleSubmit}>
         <div className=" mx-4 px-4 w-11/12 sm:w-11/12 md:7/12 lg:1/2">
@@ -169,4 +169,4 @@ const VerifyAndSetPassword = () => {
   );
 };
 
-export default VerifyAndSetPassword ;
+export default PasswordForm;

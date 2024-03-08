@@ -109,13 +109,13 @@ const FacultyLogin = () => {
 
   return (
     <div className="flex items-center justify-center h-screen bg-gradient-to-r from-blue-500 to-purple-500">
-      <div className="bg-white p-8 rounded shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-6">Faculty Login</h2>
+      <div className=" p-8 rounded shadow-md w-96 bg-blue-400 ">
+        <h2 className="text-2xl font-bold mb-6 text-white">Faculty Login</h2>
         <p className='text-red-600'>{alert}</p>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-            Email
+          <label className="block text-white text-sm font-bold mb-2" htmlFor="username">
+            Email *
           </label>
           <input
             type="text"
@@ -127,8 +127,8 @@ const FacultyLogin = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-            Password
+          <label className="block text-white text-sm font-bold mb-2" htmlFor="password">
+            Password *
           </label>
           <input
             type="password"
@@ -140,8 +140,8 @@ const FacultyLogin = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="department">
-            Department
+          <label className="block text-white text-sm font-bold mb-2" htmlFor="department">
+            Department *
           </label>
           <select
             id="department"
@@ -150,9 +150,10 @@ const FacultyLogin = () => {
             onChange={(e) => setDepartment(e.target.value)}
           >
             <option value="">Select Department</option>
-            <option value="CSE">Computer Science and Engineering (CSE)</option>
-            <option value="ECE">Electronics and Communication Engineering (ECE)</option>
-            <option value="HSS">Humanities and Social Sciences (HSS)</option>
+            <option value="CSE"> Computer Science and Engineering (CSE) </option>
+            <option value="ECE"> Electronics and Communication Engineering (ECE) </option>
+            <option value="MATHS&SCIENCE"> Maths and science </option>
+            <option value="HSS"> Humanities and Social Sciences (HSS) </option>
           </select>
         </div>
 
@@ -163,13 +164,13 @@ const FacultyLogin = () => {
           Login
         </button>
 
-        <Link to="/faculty/forgot-password" className="block text-blue-500 hover:underline mt-4">
+        <Link to="/faculty/forgot-password" className="block text-white hover:underline mt-4">
           Forgot Password?
         </Link>
-        <Link onClick={handleEmailVerification} className="block text-blue-500 hover:underline mt-2">
+        <Link onClick={handleEmailVerification} className="block text-white hover:underline mt-2">
           Verify Email
         </Link>
-        <button onClick={handleNotHaveAnAccount}>Not have an account ?</button>
+        <button onClick={handleNotHaveAnAccount} className='text-white'>Not have an account ?</button>
       </div>
       <div className='flex fixed top-2/4'>
         {

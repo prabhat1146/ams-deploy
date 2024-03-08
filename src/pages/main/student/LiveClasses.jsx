@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 const LiveClasses = () => {
     const [liveClasses, setLiveClasses] = useState([]);
     const [date, setDate] = useState(new Date());
+    const [currentDate,setCurrentDate]=useState(date.toLocaleDateString());
     const [timeSlot, setTimeSlot] = useState(
         `${String(date.getHours()).padStart(2, '0')}-${String(date.getHours() + 1).padStart(2, '0')}`
     );
@@ -11,10 +12,11 @@ const LiveClasses = () => {
         setDate(new Date())
         let d = `${String(date.getHours()).padStart(2, '0')}-${String(date.getHours() + 1).padStart(2, '0')}`
         setTimeSlot(d)
+        setCurrentDate(date.toLocaleDateString())
     }, 1000)
 
     const BASEURL=process.env.REACT_APP_BASEURL
-    const DATE = date.toISOString().split('T')[0]
+    const DATE = currentDate
 
     useEffect(() => {
         const apiUrl = `${BASEURL}/attendance/liveClasses?date=${DATE}&timeSlot=${timeSlot}`;
@@ -37,8 +39,8 @@ const LiveClasses = () => {
     return (
         <div className="container mx-auto p-4">
             <h2 className="text-2xl text-green-400 font-bold mb-4">Live Classes</h2>
-            <p className="mb-2 text-white">Date: {DATE}</p>
-            <p className="mb-4 text-white">Time : {date.getHours().toString().padStart(2, '0')}: {date.getMinutes().toString().padStart(2, '0')} : {date.getSeconds().toString().padStart(2, '0')}</p>
+            <p className="mb-2 text-white">Date: {currentDate}</p>
+            <p className="mb-4 text-white">Time : {date.getHours().toString().padStart(2, '0')} : {date.getMinutes().toString().padStart(2, '0')} : {date.getSeconds().toString().padStart(2, '0')}</p>
 
             <ul>
                 {liveClasses?.map((liveClass) => (

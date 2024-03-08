@@ -2,7 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {  Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
-import {Error,Home,Layout, AdminLogin, FacultyLogin, StudentLogin, StudentSignUp,FacultyForgetPasswordPage,StudentForgotPassword,ForgotPassword,ResetPassword, FacultyDashBoard} from './AllPages';
+import {Error,Home,Layout, AdminLogin, FacultyLogin, StudentLogin, StudentSignUp,FacultyForgetPasswordPage,StudentForgotPassword,ForgotPassword,ResetPassword, FacultyDashBoard, VerifyEmail, ChangePasswordForAdmin, AdminPasswordResetLink} from './AllPages';
 import {AdminProfile,StudentDashboard,StudentsPrivateRoutes,AdminPrivateRoutes, EmailVerificationLink,VerifyAndSetPassword,AdminSignUp} from './AllPages';
 import FacultyPrivateRoutes from './pages/main/faculty/facultyPrivateRoutes/FacultyPrivateRoutes';
 
@@ -22,7 +22,9 @@ const router=createBrowserRouter(
          </Route>
          <Route path='admin/profile' element={<AdminProfile/>}></Route>
          <Route path='admin/forgot-password' element={<ForgotPassword/>}></Route>
-         <Route path='admin/reset-password' element={<ResetPassword/>}></Route>
+         <Route path='admin/verification/reset-password' element={<ResetPassword/>}></Route>
+         <Route path='admin/verification/change-password' element={<ChangePasswordForAdmin/>}></Route>
+         <Route path='admin/verification/admin-password-reset-link' element={<AdminPasswordResetLink/>}></Route>
          <Route path='student/login' element={<StudentLogin/>}></Route>
          <Route path='student/signup' element={<StudentSignUp/>}></Route>
          <Route path='student' element={<StudentsPrivateRoutes/>}>
@@ -31,6 +33,7 @@ const router=createBrowserRouter(
          {/* <Route path='student/profile' element={<StudentDashboard/>}></Route> */}
          <Route path='student/forgot-password' element={<StudentForgotPassword/>}></Route>
          <Route path='student/reset-password' element={<ResetPassword/>}></Route>
+         <Route path='student/verification/verifyEmailpAndSetPassword' element={<VerifyEmail/>}></Route>
          <Route path='faculty/login' element={<FacultyLogin/>}></Route>
          {/* <Route path='faculty/login' element={<FacultyManagement/>}></Route> */}
          <Route path='faculty' element={<FacultyPrivateRoutes/>}>
@@ -38,6 +41,7 @@ const router=createBrowserRouter(
          </Route>
          <Route path='faculty/forgot-password' element={<FacultyForgetPasswordPage/>}></Route>
          <Route path='faculty/reset-password' element={<ResetPassword/>}></Route>
+         <Route path='faculty/verification/verifyEmailpAndSetPassword' element={<VerifyEmail/>}></Route>
          <Route path='/error' element={<Error/>}></Route>
          <Route path='*' element={<Error/>}></Route>
 
